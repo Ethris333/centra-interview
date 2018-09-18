@@ -1,28 +1,34 @@
 <?php
+namespace KanbanBoard;
 
-class GithubClient
+use Github\HttpClient\CachedHttpClient;
+use Github\Client;
+
+class Github
 {
+    const CACHE_DIR = "/tmp/github-api-cache";
+
     private $client;
     private $milestone_api;
     private $account;
 
-    public function __construct($token, $account)
+    public function __construct(array $token, string $account)
     {
         require '../../vendor/autoload.php';
         $this->account = $account;
-        $this->client= new \Github\Client(new \Github\HttpClient\CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
-        $this->client->authenticate($token, \Github\Client::AUTH_HTTP_TOKEN);
+        $this->client = new Client(new CachedHttpClient(['cache_dir' => self::CACHE_DIR]));
+        $this->client->authenticate($token, Client::AUTH_URL_TOKEN);
         $this->milestone_api = $this->client->api('issues')->milestones();
     }
 
-    public function milestones($repository)
+    public function milestones(string $repository) : array
     {
         return $this->milestone_api->all($this->account, $repository);
     }
 
-    public function issues($repository, $milestone_id)
+    public function issues(string $repository, int $milestone_id) : array
     {
-        $issue_parameters = array('milestone' => $milestone_id, 'state' => 'all');
+        $issue_parameters = ['milestone' => $milestone_id, 'state' => 'all'];
         return $this->client->api('issue')->all($this->account, $repository, $issue_parameters);
     }
 }
