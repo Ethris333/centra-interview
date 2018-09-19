@@ -1,0 +1,5 @@
+[github]
+gh_client_id = <id>
+gh_client_secret = <secret>
+gh_account = <account-name>
+gh_repositories = <repositories>

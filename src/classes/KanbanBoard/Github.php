@@ -7,6 +7,7 @@ use Github\Client;
 class Github
 {
     const CACHE_DIR = "/tmp/github-api-cache";
+    const ISSUE_STATE = "all";
 
     private $client;
     private $milestone_api;
@@ -28,7 +29,7 @@ class Github
 
     public function issues(string $repository, int $milestone_id) : array
     {
-        $issue_parameters = ['milestone' => $milestone_id, 'state' => 'all'];
+        $issue_parameters = ['milestone' => $milestone_id, 'state' => self::ISSUE_STATE];
         return $this->client->api('issue')->all($this->account, $repository, $issue_parameters);
     }
 }

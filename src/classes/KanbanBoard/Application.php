@@ -11,7 +11,7 @@ class Application
     const CLOSED = 'closed';
     const WAITING = 'waiting-for-feedback';
 
-    public function __construct(object $github, array $repositories, array $paused_labels = [])
+    public function __construct(Github $github, array $repositories, array $paused_labels = [])
     {
         $this->github = $github;
         $this->repositories = $repositories;
